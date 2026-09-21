@@ -14,11 +14,11 @@ Steps:
      with the same verb stem elsewhere in the corpus, excluding the correct one.
 
 Usage:
-    python src/build_stimuli.py --input data/extracted/separable_verbs_extracted.csv \
+    python build_stimuli.py --input data/extracted/separable_verbs_extracted.csv \
         --output data/stimuli/stimulus_set_v1.csv --n-per-cell 3 --seed 42
 
     # to see stem/bucket coverage without writing a file, e.g. before deciding on stems:
-    python src/build_stimuli.py --input data/extracted/separable_verbs_extracted.csv --report-only
+    python build_stimuli.py --input data/extracted/separable_verbs_extracted.csv --report-only
 """
 
 import argparse
@@ -74,7 +74,8 @@ def report_coverage(rows, stems, short_max, medium_max):
         print(f"{stem:<12} {n_prefixes:<10} {counts['short']:<8} {counts['medium']:<8} {counts['long']:<8}")
 
 
-def build(rows, stems, n_per_cell, short_max, medium_max, n_distractors, seed):
+def build(rows, stems, n_per_cell, short_max, medium_max, n_distractors, seed,
+          full_ranking=False):
     random.seed(seed)
 
     stem_to_prefixes = defaultdict(set)
@@ -100,9 +101,13 @@ def build(rows, stems, n_per_cell, short_max, medium_max, n_distractors, seed):
                 distractor_pool = [p for p in prefixes_for_stem if p != correct_prefix]
                 if not distractor_pool:
                     continue
-                distractors = random.sample(
-                    distractor_pool, min(n_distractors, len(distractor_pool))
-                )
+                if full_ranking:
+                    # compete against EVERY other attested prefix for this stem
+                    distractors = sorted(distractor_pool)
+                else:
+                    distractors = random.sample(
+                        distractor_pool, min(n_distractors, len(distractor_pool))
+                    )
                 items.append({
                     "item_id": item_id,
                     "verb_stem": stem,
@@ -111,6 +116,7 @@ def build(rows, stems, n_per_cell, short_max, medium_max, n_distractors, seed):
                     "context_sentence": r["context_up_to_prefix"],
                     "correct_prefix": correct_prefix,
                     "distractor_prefixes": ";".join(distractors),
+                    "n_candidates": len(distractors) + 1,
                     "full_original_sentence": r["text"],
                     "intervening_text": r["intervening_text"],
                     "sent_id": r["sent_id"],
@@ -128,10 +134,14 @@ def main():
     parser.add_argument("--output", default="stimulus_set_v1.csv")
     parser.add_argument("--stems", nargs="*", default=None,
                          help="Verb stems to include (default: a built-in curated list).")
-    parser.add_argument("--n-per-cell", type=int, default=5,
+    parser.add_argument("--n-per-cell", type=int, default=3,
                          help="Number of items to sample per (stem, distance bucket).")
     parser.add_argument("--n-distractors", type=int, default=2,
-                         help="Number of distractor prefixes per item.")
+                         help="Number of distractor prefixes per item (ignored if --full-ranking).")
+    parser.add_argument("--full-ranking", action="store_true",
+                         help="Instead of sampling a fixed number of distractors, use EVERY "
+                              "other prefix attested with the same stem as a candidate. "
+                              "Turns the task from forced-choice into full ranking.")
     parser.add_argument("--short-max", type=int, default=2,
                          help="Max intervening-token count still counted as 'short'.")
     parser.add_argument("--medium-max", type=int, default=7,
@@ -155,7 +165,7 @@ def main():
         return
 
     items = build(rows, stems, args.n_per_cell, args.short_max, args.medium_max,
-                   args.n_distractors, args.seed)
+                   args.n_distractors, args.seed, full_ranking=args.full_ranking)
 
     if not items:
         print("No items generated — check that --stems match verb_lemma values "

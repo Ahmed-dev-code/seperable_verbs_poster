@@ -1,0 +1,4 @@
+model                     short     medium       long    overall
+dbmdz                     89.4%      89.4%      96.5%      91.8%
+gerpt2_large              89.4%      94.1%      96.5%      93.3%
+mgpt                      84.7%      84.7%      91.8%      87.1%

@@ -1,0 +1,426 @@
+{
+  "input_file": "results\\results_mgpt.csv",
+  "model": "results_mgpt",
+  "overall": {
+    "total_items": 255,
+    "valid_predictions": 255,
+    "correct_predictions": 222,
+    "accuracy": 0.8705882352941177,
+    "accuracy_95_ci": [
+      0.8274509803921568,
+      0.9098039215686274
+    ]
+  },
+  "margin": {
+    "mean": 4.508485855747188,
+    "median": 4.340606600046158,
+    "std": 3.9001610751729556,
+    "min": -5.202184597495943,
+    "max": 15.784460321068764,
+    "positive_margin_rate": 0.8705882352941177,
+    "negative_margin_rate": 0.12941176470588237,
+    "zero_margin_rate": 0.0
+  },
+  "correlations": {
+    "distance_vs_margin_pearson_r": 0.18615683534250288,
+    "distance_vs_accuracy_pearson_r": 0.10698007802559845
+  },
+  "distance_buckets": [
+    {
+      "distance_bucket": "long",
+      "n_items": 85,
+      "accuracy": 0.9176470588235294,
+      "mean_distance": 12.070588235294117,
+      "median_distance": 10.0,
+      "mean_margin": 5.068859729248866,
+      "median_margin": 5.119792819023132,
+      "mean_correct_logprob": -1.8053474869017545,
+      "mean_correct_logprob_per_token": -1.7345876855999414
+    },
+    {
+      "distance_bucket": "medium",
+      "n_items": 85,
+      "accuracy": 0.8470588235294118,
+      "mean_distance": 4.741176470588235,
+      "median_distance": 5.0,
+      "mean_margin": 4.262497155555278,
+      "median_margin": 3.878418445587158,
+      "mean_correct_logprob": -2.4165547050857534,
+      "mean_correct_logprob_per_token": -2.23448195026562
+    },
+    {
+      "distance_bucket": "short",
+      "n_items": 85,
+      "accuracy": 0.8470588235294118,
+      "mean_distance": 1.3411764705882352,
+      "median_distance": 1.0,
+      "mean_margin": 4.19410068243742,
+      "median_margin": 3.9069786071777344,
+      "mean_correct_logprob": -2.673197649068692,
+      "mean_correct_logprob_per_token": -2.644466947995163
+    }
+  ],
+  "exact_distance": [
+    {
+      "n_intervening_tokens": 0,
+      "n_items": 11,
+      "accuracy": 0.8181818181818182,
+      "mean_margin": 3.586145606907931,
+      "median_margin": 3.724441647529602
+    },
+    {
+      "n_intervening_tokens": 1,
+      "n_items": 34,
+      "accuracy": 0.8823529411764706,
+      "mean_margin": 4.304323176596561,
+      "median_margin": 3.5473451614379883
+    },
+    {
+      "n_intervening_tokens": 2,
+      "n_items": 40,
+      "accuracy": 0.825,
+      "mean_margin": 4.26759920817276,
+      "median_margin": 4.437232732772827
+    },
+    {
+      "n_intervening_tokens": 3,
+      "n_items": 27,
+      "accuracy": 0.7777777777777778,
+      "mean_margin": 4.411695775144768,
+      "median_margin": 4.742023229598999
+    },
+    {
+      "n_intervening_tokens": 4,
+      "n_items": 12,
+      "accuracy": 0.8333333333333334,
+      "mean_margin": 5.142243832970659,
+      "median_margin": 4.916883587837219
+    },
+    {
+      "n_intervening_tokens": 5,
+      "n_items": 16,
+      "accuracy": 0.875,
+      "mean_margin": 3.139246337905206,
+      "median_margin": 3.345428466796875
+    },
+    {
+      "n_intervening_tokens": 6,
+      "n_items": 16,
+      "accuracy": 0.9375,
+      "mean_margin": 5.258655864337925,
+      "median_margin": 4.927749663591385
+    },
+    {
+      "n_intervening_tokens": 7,
+      "n_items": 14,
+      "accuracy": 0.8571428571428571,
+      "mean_margin": 3.365936504410846,
+      "median_margin": 3.2781009674072266
+    },
+    {
+      "n_intervening_tokens": 8,
+      "n_items": 16,
+      "accuracy": 0.875,
+      "mean_margin": 4.059412091039121,
+      "median_margin": 4.441684767603874
+    },
+    {
+      "n_intervening_tokens": 9,
+      "n_items": 22,
+      "accuracy": 1.0,
+      "mean_margin": 4.550153239275625,
+      "median_margin": 3.935279905796051
+    },
+    {
+      "n_intervening_tokens": 10,
+      "n_items": 12,
+      "accuracy": 0.8333333333333334,
+      "mean_margin": 3.243192813320396,
+      "median_margin": 4.5203686356544495
+    },
+    {
+      "n_intervening_tokens": 11,
+      "n_items": 8,
+      "accuracy": 0.75,
+      "mean_margin": 4.858299480751157,
+      "median_margin": 5.010776549577713
+    },
+    {
+      "n_intervening_tokens": 12,
+      "n_items": 3,
+      "accuracy": 1.0,
+      "mean_margin": 7.227348456159234,
+      "median_margin": 7.309154465794563
+    },
+    {
+      "n_intervening_tokens": 13,
+      "n_items": 2,
+      "accuracy": 1.0,
+      "mean_margin": 6.030231386423111,
+      "median_margin": 6.030231386423111
+    },
+    {
+      "n_intervening_tokens": 14,
+      "n_items": 4,
+      "accuracy": 1.0,
+      "mean_margin": 6.509716037660837,
+      "median_margin": 6.404688097536564
+    },
+    {
+      "n_intervening_tokens": 15,
+      "n_items": 2,
+      "accuracy": 1.0,
+      "mean_margin": 3.7165586054325104,
+      "median_margin": 3.7165586054325104
+    },
+    {
+      "n_intervening_tokens": 16,
+      "n_items": 2,
+      "accuracy": 1.0,
+      "mean_margin": 5.309844672679901,
+      "median_margin": 5.309844672679901
+    },
+    {
+      "n_intervening_tokens": 17,
+      "n_items": 3,
+      "accuracy": 0.6666666666666666,
+      "mean_margin": 8.209387608493367,
+      "median_margin": 10.085815535858274
+    },
+    {
+      "n_intervening_tokens": 18,
+      "n_items": 2,
+      "accuracy": 1.0,
+      "mean_margin": 8.058366663753986,
+      "median_margin": 8.058366663753986
+    },
+    {
+      "n_intervening_tokens": 19,
+      "n_items": 2,
+      "accuracy": 1.0,
+      "mean_margin": 4.008768081665039,
+      "median_margin": 4.008768081665039
+    },
+    {
+      "n_intervening_tokens": 22,
+      "n_items": 1,
+      "accuracy": 1.0,
+      "mean_margin": 7.566695980727673,
+      "median_margin": 7.566695980727673
+    },
+    {
+      "n_intervening_tokens": 23,
+      "n_items": 1,
+      "accuracy": 1.0,
+      "mean_margin": 11.739891346544027,
+      "median_margin": 11.739891346544027
+    },
+    {
+      "n_intervening_tokens": 24,
+      "n_items": 1,
+      "accuracy": 1.0,
+      "mean_margin": 8.504146881401539,
+      "median_margin": 8.504146881401539
+    },
+    {
+      "n_intervening_tokens": 26,
+      "n_items": 1,
+      "accuracy": 1.0,
+      "mean_margin": 10.112900054082274,
+      "median_margin": 10.112900054082274
+    },
+    {
+      "n_intervening_tokens": 27,
+      "n_items": 1,
+      "accuracy": 1.0,
+      "mean_margin": 3.9359664916992183,
+      "median_margin": 3.9359664916992183
+    },
+    {
+      "n_intervening_tokens": 29,
+      "n_items": 1,
+      "accuracy": 1.0,
+      "mean_margin": 10.513438828289509,
+      "median_margin": 10.513438828289509
+    },
+    {
+      "n_intervening_tokens": 36,
+      "n_items": 1,
+      "accuracy": 1.0,
+      "mean_margin": 9.044751912355425,
+      "median_margin": 9.044751912355425
+    }
+  ],
+  "verb_stems": [
+    {
+      "verb_stem": "schlagen",
+      "n_items": 15,
+      "accuracy": 0.7333333333333333,
+      "mean_distance": 6.733333333333333,
+      "mean_margin": 3.3873400336752337,
+      "median_margin": 3.9359664916992183,
+      "mean_correct_logprob": -2.895737699046731
+    },
+    {
+      "verb_stem": "bringen",
+      "n_items": 15,
+      "accuracy": 0.8,
+      "mean_distance": 5.8,
+      "mean_margin": 2.1268656055132547,
+      "median_margin": 2.481067657470703,
+      "mean_correct_logprob": -3.109530834356944
+    },
+    {
+      "verb_stem": "führen",
+      "n_items": 15,
+      "accuracy": 0.8,
+      "mean_distance": 6.133333333333334,
+      "mean_margin": 4.018231318394343,
+      "median_margin": 2.753970980644226,
+      "mean_correct_logprob": -2.0832562863826753
+    },
+    {
+      "verb_stem": "fallen",
+      "n_items": 15,
+      "accuracy": 0.8,
+      "mean_distance": 5.133333333333334,
+      "mean_margin": 4.190583598148078,
+      "median_margin": 3.9069786071777344,
+      "mean_correct_logprob": -2.038790222474684
+    },
+    {
+      "verb_stem": "laufen",
+      "n_items": 15,
+      "accuracy": 0.8,
+      "mean_distance": 5.2,
+      "mean_margin": 4.7177381471420325,
+      "median_margin": 5.699020326137543,
+      "mean_correct_logprob": -2.91347984119008
+    },
+    {
+      "verb_stem": "gehen",
+      "n_items": 15,
+      "accuracy": 0.8,
+      "mean_distance": 7.733333333333333,
+      "mean_margin": 5.806730763808203,
+      "median_margin": 6.213007926940918,
+      "mean_correct_logprob": -2.2691707723385965
+    },
+    {
+      "verb_stem": "ziehen",
+      "n_items": 15,
+      "accuracy": 0.8,
+      "mean_distance": 6.4,
+      "mean_margin": 3.2555540130473672,
+      "median_margin": 3.624584197998047,
+      "mean_correct_logprob": -2.618771810736507
+    },
+    {
+      "verb_stem": "geben",
+      "n_items": 15,
+      "accuracy": 0.8666666666666667,
+      "mean_distance": 5.533333333333333,
+      "mean_margin": 4.196528317282597,
+      "median_margin": 4.007976710796356,
+      "mean_correct_logprob": -2.4136182688176633
+    },
+    {
+      "verb_stem": "setzen",
+      "n_items": 15,
+      "accuracy": 0.8666666666666667,
+      "mean_distance": 6.733333333333333,
+      "mean_margin": 4.75381176052615,
+      "median_margin": 5.814189910888672,
+      "mean_correct_logprob": -2.4350912851281463
+    },
+    {
+      "verb_stem": "machen",
+      "n_items": 15,
+      "accuracy": 0.8666666666666667,
+      "mean_distance": 5.266666666666667,
+      "mean_margin": 3.3979080777304866,
+      "median_margin": 3.425802230834961,
+      "mean_correct_logprob": -3.2690302271706364
+    },
+    {
+      "verb_stem": "kommen",
+      "n_items": 15,
+      "accuracy": 0.9333333333333333,
+      "mean_distance": 6.333333333333333,
+      "mean_margin": 5.603315967868548,
+      "median_margin": 4.97466678917408,
+      "mean_correct_logprob": -2.557227846432943
+    },
+    {
+      "verb_stem": "nehmen",
+      "n_items": 15,
+      "accuracy": 0.9333333333333333,
+      "mean_distance": 6.266666666666667,
+      "mean_margin": 5.9750768544928485,
+      "median_margin": 6.770889043807983,
+      "mean_correct_logprob": -1.6993915038648992
+    },
+    {
+      "verb_stem": "stellen",
+      "n_items": 15,
+      "accuracy": 0.9333333333333333,
+      "mean_distance": 5.8,
+      "mean_margin": 4.171928989204267,
+      "median_margin": 3.7205809354782096,
+      "mean_correct_logprob": -2.42829612561812
+    },
+    {
+      "verb_stem": "treten",
+      "n_items": 15,
+      "accuracy": 0.9333333333333333,
+      "mean_distance": 5.4,
+      "mean_margin": 3.6983697881301243,
+      "median_margin": 3.4493980407714844,
+      "mean_correct_logprob": -1.8531212657690048
+    },
+    {
+      "verb_stem": "sehen",
+      "n_items": 15,
+      "accuracy": 0.9333333333333333,
+      "mean_distance": 6.266666666666667,
+      "mean_margin": 4.635991416933636,
+      "median_margin": 5.111553430557251,
+      "mean_correct_logprob": -1.5145033493017157
+    },
+    {
+      "verb_stem": "halten",
+      "n_items": 15,
+      "accuracy": 1.0,
+      "mean_distance": 5.333333333333333,
+      "mean_margin": 6.617842271613578,
+      "median_margin": 5.621612668037415,
+      "mean_correct_logprob": -2.034849633090198
+    },
+    {
+      "verb_stem": "finden",
+      "n_items": 15,
+      "accuracy": 1.0,
+      "mean_distance": 6.8,
+      "mean_margin": 6.090442624191443,
+      "median_margin": 6.06598287820816,
+      "mean_correct_logprob": -0.9383654609322548
+    }
+  ],
+  "candidate_counts": [
+    {
+      "n_distractors": 1,
+      "n_items": 255,
+      "accuracy": 0.8705882352941177,
+      "mean_margin": 4.508485855747188
+    }
+  ],
+  "data_quality": {
+    "rows": 255,
+    "unique_items": 255,
+    "duplicate_item_ids": 0,
+    "missing_correct_logprob": 0,
+    "missing_margin": 0,
+    "missing_distance": 0,
+    "missing_prediction": 0
+  }
+}

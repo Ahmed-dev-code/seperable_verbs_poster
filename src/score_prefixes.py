@@ -92,7 +92,10 @@ def run_hf(args):
         "distractor_logprobs",       # semicolon-separated, aligned with distractor_prefixes
         "best_distractor_logprob",
         "margin",                    # correct_logprob - best_distractor_logprob
-        "model_prefers_correct",     # 1 if margin > 0 else 0
+        "model_prefers_correct",     # 1 if margin > 0 else 0 (i.e. rank == 1)
+        "rank",                      # 1 = correct prefix scored highest among all candidates
+        "n_candidates",              # total number of candidates it competed against (incl. correct)
+        "reciprocal_rank",           # 1/rank -- standard ranking metric (MRR when averaged)
     ]
 
     out_rows = []
@@ -112,13 +115,26 @@ def run_hf(args):
         best_distractor_lp = max(distractor_lps) if distractor_lps else float("-inf")
         margin = correct_lp - best_distractor_lp
 
+        # Rank: sort all candidates (correct + distractors) by logprob descending,
+        # find the 1-indexed position of the correct one. Ties broken in favor of
+        # the correct candidate (i.e. a tie counts as rank 1) to avoid penalizing
+        # exact float equality edge cases.
+        all_scores = [("__correct__", correct_lp)] + list(zip(distractors, distractor_lps))
+        all_scores.sort(key=lambda x: x[1], reverse=True)
+        rank = next(i + 1 for i, (label, _) in enumerate(all_scores) if label == "__correct__")
+        n_candidates = len(all_scores)
+        reciprocal_rank = 1.0 / rank
+
         row_out = dict(row)
         row_out["correct_logprob"] = correct_lp
         row_out["correct_logprob_per_token"] = correct_lp_per_tok
         row_out["distractor_logprobs"] = ";".join(f"{x:.4f}" for x in distractor_lps)
         row_out["best_distractor_logprob"] = best_distractor_lp
         row_out["margin"] = margin
-        row_out["model_prefers_correct"] = int(margin > 0)
+        row_out["model_prefers_correct"] = int(rank == 1)
+        row_out["rank"] = rank
+        row_out["n_candidates"] = n_candidates
+        row_out["reciprocal_rank"] = reciprocal_rank
         out_rows.append(row_out)
 
         if (i + 1) % 20 == 0:
@@ -130,8 +146,12 @@ def run_hf(args):
         writer.writerows(out_rows)
 
     n_correct = sum(r["model_prefers_correct"] for r in out_rows)
-    print(f"\nDone. Overall accuracy (prefers correct prefix): {n_correct}/{len(out_rows)} "
+    mean_rr = sum(r["reciprocal_rank"] for r in out_rows) / len(out_rows)
+    mean_rank = sum(r["rank"] for r in out_rows) / len(out_rows)
+    print(f"\nDone. Top-1 accuracy: {n_correct}/{len(out_rows)} "
           f"({100 * n_correct / len(out_rows):.1f}%)")
+    print(f"Mean reciprocal rank (MRR): {mean_rr:.3f}")
+    print(f"Mean rank: {mean_rank:.2f} (out of avg {sum(r['n_candidates'] for r in out_rows) / len(out_rows):.1f} candidates)")
     print(f"Saved detailed results to {args.output}")
 
 

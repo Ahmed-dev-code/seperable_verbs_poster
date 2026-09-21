@@ -1,0 +1,4 @@
+model,short,medium,long,overall
+dbmdz,0.894,0.894,0.965,0.918
+gerpt2_large,0.894,0.941,0.965,0.933
+mgpt,0.847,0.847,0.918,0.871
