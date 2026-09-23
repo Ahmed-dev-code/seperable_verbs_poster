@@ -84,6 +84,25 @@ def margin_by_bucket(rows):
     return result
 
 
+def mrr_by_bucket(rows):
+    """{ model: { bucket: mean_reciprocal_rank } }"""
+    sums = defaultdict(lambda: defaultdict(list))
+    for r in rows:
+        try:
+            rr = float(r["reciprocal_rank"])
+        except (ValueError, KeyError):
+            continue
+        sums[r["model"]][r["distance_bucket"]].append(rr)
+
+    result = {}
+    for model, buckets in sums.items():
+        result[model] = {}
+        for b in BUCKET_ORDER:
+            if b in buckets and buckets[b]:
+                result[model][b] = sum(buckets[b]) / len(buckets[b])
+    return result
+
+
 def accuracy_by_stem(rows):
     """{ model: { stem: accuracy } }"""
     counts = defaultdict(lambda: defaultdict(lambda: [0, 0]))
@@ -137,6 +156,32 @@ def plot_margin_vs_distance(margin_by_bucket_data, out_path):
     print(f"Saved {out_path}")
 
 
+def plot_mrr_vs_distance(mrr_by_bucket_data, out_path):
+    """Mean Reciprocal Rank vs. distance -- the headline figure for the
+    full-ranking setup (--full-ranking in build_stimuli.py), since it's much
+    more sensitive than top-1 accuracy once items have many (10-40+) candidates:
+    a model that ranks the correct prefix 2nd out of 40 is doing something very
+    different from one that ranks it 35th, even though both score 0 on top-1
+    accuracy. MRR of 1.0 = always rank 1 (perfect); lower = worse on average,
+    and the scale is intuitive (MRR of 0.5 means the correct answer is on
+    average found around rank 2)."""
+    plt.figure(figsize=(7, 5))
+    for model, buckets in mrr_by_bucket_data.items():
+        xs = [b for b in BUCKET_ORDER if b in buckets]
+        ys = [buckets[b] for b in xs]
+        plt.plot(xs, ys, marker="o", label=model)
+    plt.xlabel("Distance between verb stem and prefix")
+    plt.ylabel("Mean Reciprocal Rank (MRR)")
+    plt.title("Correct-prefix ranking quality vs. distance")
+    plt.ylim(0, 1.05)
+    plt.legend()
+    plt.grid(alpha=0.3)
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=200)
+    plt.close()
+    print(f"Saved {out_path}")
+
+
 def plot_accuracy_by_stem(acc_by_stem, out_path):
     models = list(acc_by_stem.keys())
     all_stems = sorted({s for m in acc_by_stem.values() for s in m.keys()})
@@ -162,10 +207,13 @@ def plot_accuracy_by_stem(acc_by_stem, out_path):
     print(f"Saved {out_path}")
 
 
-def print_and_save_summary(acc_by_bucket, out_path):
-    fieldnames = ["model"] + BUCKET_ORDER + ["overall"]
+def print_and_save_summary(acc_by_bucket, mrr_by_bucket_data, out_path):
+    fieldnames = ["model"] + [f"{b}_acc" for b in BUCKET_ORDER] + ["overall_acc"] \
+                 + [f"{b}_mrr" for b in BUCKET_ORDER] + ["overall_mrr"]
     rows_out = []
-    print(f"\n{'model':<20} " + " ".join(f"{b:>10}" for b in BUCKET_ORDER) + f" {'overall':>10}")
+    header = f"{'model':<20} " + " ".join(f"{b+'_acc':>10}" for b in BUCKET_ORDER) + f" {'ov_acc':>8} "
+    header += " ".join(f"{b+'_mrr':>10}" for b in BUCKET_ORDER) + f" {'ov_mrr':>8}"
+    print(f"\n{header}")
     for model, buckets in acc_by_bucket.items():
         total_correct, total_n = 0, 0
         row = {"model": model}
@@ -176,13 +224,28 @@ def print_and_save_summary(acc_by_bucket, out_path):
                 total_correct += acc * n
                 total_n += n
                 line += f"{acc:>10.1%} "
-                row[b] = f"{acc:.3f}"
+                row[f"{b}_acc"] = f"{acc:.3f}"
             else:
                 line += f"{'--':>10} "
-                row[b] = ""
-        overall = total_correct / total_n if total_n else float("nan")
-        line += f"{overall:>10.1%}"
-        row["overall"] = f"{overall:.3f}"
+                row[f"{b}_acc"] = ""
+        overall_acc = total_correct / total_n if total_n else float("nan")
+        line += f"{overall_acc:>8.1%} "
+        row["overall_acc"] = f"{overall_acc:.3f}"
+
+        mrr_buckets = mrr_by_bucket_data.get(model, {})
+        mrr_vals = []
+        for b in BUCKET_ORDER:
+            if b in mrr_buckets:
+                line += f"{mrr_buckets[b]:>10.3f} "
+                row[f"{b}_mrr"] = f"{mrr_buckets[b]:.3f}"
+                mrr_vals.append(mrr_buckets[b])
+            else:
+                line += f"{'--':>10} "
+                row[f"{b}_mrr"] = ""
+        overall_mrr = sum(mrr_vals) / len(mrr_vals) if mrr_vals else float("nan")
+        line += f"{overall_mrr:>8.3f}"
+        row["overall_mrr"] = f"{overall_mrr:.3f}"
+
         print(line)
         rows_out.append(row)
 
@@ -224,12 +287,14 @@ def main():
 
     acc_bucket = accuracy_by_bucket(rows)
     marg_bucket = margin_by_bucket(rows)
+    mrr_bucket = mrr_by_bucket(rows)
     acc_stem = accuracy_by_stem(rows)
 
     plot_accuracy_vs_distance(acc_bucket, f"{args.outdir}/accuracy_vs_distance.png")
     plot_margin_vs_distance(marg_bucket, f"{args.outdir}/margin_vs_distance.png")
+    plot_mrr_vs_distance(mrr_bucket, f"{args.outdir}/mrr_vs_distance.png")
     plot_accuracy_by_stem(acc_stem, f"{args.outdir}/accuracy_by_stem.png")
-    print_and_save_summary(acc_bucket, f"{args.outdir}/summary_accuracy.csv")
+    print_and_save_summary(acc_bucket, mrr_bucket, f"{args.outdir}/summary_accuracy.csv")
 
 
 if __name__ == "__main__":

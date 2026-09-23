@@ -1,0 +1,4 @@
+model,short_acc,medium_acc,long_acc,overall_acc,short_mrr,medium_mrr,long_mrr,overall_mrr
+fullrank_german-gpt2,0.647,0.843,0.843,0.778,0.754,0.891,0.906,0.850
+fullrank_gerpt2-large,0.647,0.843,0.804,0.765,0.739,0.893,0.882,0.838
+fullrank_mgpt,0.667,0.784,0.765,0.739,0.750,0.850,0.856,0.819

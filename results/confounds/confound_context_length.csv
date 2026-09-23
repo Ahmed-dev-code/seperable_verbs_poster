@@ -1,0 +1,10 @@
+model,bucket,n_items,correlation
+fullrank_german-gpt2,short,51,0.035
+fullrank_german-gpt2,medium,51,0.217
+fullrank_german-gpt2,long,51,0.034
+fullrank_gerpt2-large,short,51,-0.001
+fullrank_gerpt2-large,medium,51,0.193
+fullrank_gerpt2-large,long,51,0.225
+fullrank_mgpt,short,51,-0.035
+fullrank_mgpt,medium,51,0.128
+fullrank_mgpt,long,51,0.082
